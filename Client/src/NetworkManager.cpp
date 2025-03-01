@@ -49,6 +49,8 @@ bool NetworkManager::sendMessage(std::string message){
     //Send serialized data over socket
     send(sock, packet.data(), sizeof(packet.data()), 0);
 
+    std::cout << "Sent: " << packet.data() << std::endl;
+
     onMessage(packet, false);
 }
 
@@ -62,6 +64,8 @@ void NetworkManager::recieveMessages(){
         //Create packet and deseialize the buffer
         Packet packet;
         packet.deserialize(buffer);
+
+        std::cout << "Recieved: " << packet.data() << std::endl;
 
         if(packet.data() == nullptr) {
             std::cerr << "Failed to deserialize packet" << std::endl;
