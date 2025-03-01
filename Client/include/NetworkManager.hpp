@@ -64,9 +64,7 @@ private:
     std::thread senderThread;
 
 public:
-    NetworkManager::NetworkManager(std::function<void(Packet, bool)> messageCallback)
-    : onMessage(messageCallback) {} // Store the callback
-
+    NetworkManager(std::function<void(Packet, bool)> messageCallback);
     
     bool initConnection(int Port, char* ip);
 

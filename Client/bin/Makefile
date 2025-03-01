@@ -26,9 +26,9 @@ MessageManager.o: $(SRC)/MessageManager.cpp $(INCLUDE)/MessageManager.hpp
 	$(CXX) $(CXXFLAGS) $<
 
 mainscreen.o: $(SRC)/mainscreen.cpp $(INCLUDE)/ui/mainscreen.h
+	$(CXX) $(CXXFLAGS) $<
 
 Packet.o: $(SHARED)/Packet.cpp $(SHARED)/Packet.h
-
 	$(CXX) $(CXXFLAGS) $<
 
 clean:

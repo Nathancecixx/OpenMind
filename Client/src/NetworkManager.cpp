@@ -1,6 +1,8 @@
 #include <iostream>
 #include "NetworkManager.hpp"
 
+NetworkManager::NetworkManager(std::function<void(Packet, bool)> messageCallback) : onMessage(messageCallback) {} // Store the callback
+
 bool NetworkManager::initConnection(int Port, char* ip){
     //WSA Startup
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
@@ -39,7 +41,7 @@ bool NetworkManager::sendMessage(std::string message){
     Packet packet;
     packet.serialize(Packet::FLAGS::NONE, Packet::MESSAGE, message);
     
-    if(packet.data() == false) {
+    if(packet.data() == nullptr) {
         std::cerr << "Failed to serialize packet" << std::endl;
         return false;
     }
@@ -61,7 +63,7 @@ void NetworkManager::recieveMessages(){
         Packet packet;
         packet.deserialize(buffer);
 
-        if(packet.data() == false) {
+        if(packet.data() == nullptr) {
             std::cerr << "Failed to deserialize packet" << std::endl;
             return;
         }
