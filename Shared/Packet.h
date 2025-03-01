@@ -3,22 +3,24 @@
 #include <iostream>
 
 class Packet {
+public:
+// Flags
+enum FLAGS { NONE };
+// Type
+enum TYPE { INVALID, CONNECT, DECONNECT, SERVER_CLOSE, MESSAGE };
+
 private:
-    // Flags
-    enum FLAGS { NONE };
-    // Type
-    enum TYPE { INVALID, CONNECT, DECONNECT, SERVER_CLOSE, MESSAGE };
-    // Holds the databuffer
-    char* m_data;
+// Holds the databuffer
+char* m_data;
 
-    // Holds header data
-    typedef struct {
-        unsigned short flags : 3;
-        unsigned short type : 3;
-        unsigned short length : 10;
-    } Header;
+// Holds header data
+typedef struct {
+    unsigned short flags : 3;
+    unsigned short type : 3;
+    unsigned short length : 10;
+} Header;
 
-    Header m_head;
+Header m_head;
 
 public:
     // ----- Creation ----- Destruction -----
