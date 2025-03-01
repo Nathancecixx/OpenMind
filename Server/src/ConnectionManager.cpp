@@ -1,10 +1,12 @@
 #include "ConnectionManager.h"
 
 #include <thread>
+#include <sstream>
 
-#include "Client.h"
+#include "library.h"
 
-constexpr int POLL_WAIT		= 100;
+constexpr int POLL_WAIT			= 100;
+constexpr int DISCONNECT_DELAY	= 3;
 
 // ----- Creation ----- Destruction -----
 
@@ -22,7 +24,7 @@ ConnectionManager::ConnectionManager(int port) {
 	// Create Socket
 	this->m_serverSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (this->m_serverSocket == INVALID_SOCKET) {
-		std::cerr << "ERORR: Failed to create ClientSocket" << std::endl;
+		std::cerr << "ERROR: Failed to create ClientSocket" << std::endl;
 		return;
 	}
 
@@ -45,6 +47,7 @@ ConnectionManager::ConnectionManager(int port) {
 
 	this->m_validSetup = true;
 	this->m_isRunning = true;
+	this->m_shutdown = false;
 }
 
 ConnectionManager::~ConnectionManager() {
@@ -66,36 +69,76 @@ bool ConnectionManager::isRunning() {
 
 // ----- Updating ----- Server -----
 
-void ConnectionManager::update() {
+void ConnectionManager::createChatroom(Client c1, Client c2) {
 	
 }
 
 void ConnectionManager::await() {
-    std::cout << "Server checking connections on thread " << std::this_thread::get_id() << "\n";
+	// Print await info
+	std::stringstream ss;
+	ss << std::this_thread::get_id();
+	library::print("Server checking connections on thread " + ss.str() + '\n');
 
-    // Checks for client connections
+	// Setup accepting
     sockaddr_in clientAddr;
     int length = sizeof(clientAddr);
     int newClient;
     struct pollfd fds[1];
     fds[0].fd = this->m_serverSocket;
     fds[0].events = POLLIN;
-
+	
+    // Checks for client connections
+	Client* firstClient = nullptr;
     while (this->isRunning()) {
-        if (Poll(fds, 1, POLL_WAIT) > 0) {
-            if ((newClient = accept(this->m_serverSocket, (sockaddr*)&clientAddr, &length)) != -1) {
-				std::cout << "Client connected\n";
-				Client c(newClient, clientAddr, length);
+		if (Poll(fds, 1, POLL_WAIT) > 0) {
+			if ((newClient = accept(this->m_serverSocket, (sockaddr*)&clientAddr, &length)) != -1) {
+				library::print("Client connected\n");
+				// Add first client to queue
+				if (firstClient == nullptr) {
+					firstClient = new Client(newClient, clientAddr, length);
+				}
+				// Create chatroom with both clients
+				else {
+					Client secondClient(newClient, clientAddr, length);
+					this->createChatroom(*firstClient, secondClient);
+					delete firstClient;
+					firstClient = nullptr;
+				}
             }
         }
     }
 }
 
-void ConnectionManager::disconnect() {
+void ConnectionManager::countdown() {
+	// Countdown math
+	clock_t start = clock();
+	clock_t cur = clock();
+	while (((cur - start) / CLOCKS_PER_SEC) < DISCONNECT_DELAY) {
+		cur = clock();
+	}
 	this->m_isRunning = false;
 }
 
-void ConnectionManager::messageSend(const std::string& message) {
-    // send(this->m_clientSocket, message.c_str(), message.length(), 0);
+void ConnectionManager::disconnect() {
+	// Already shutting down
+	if (this->m_shutdown) {
+		// Check instant shutdown
+		library::print("Would you like to shutdown the server immediately?\n"
+			"Type \"yes\" to confirm: ");
+		std::string input;
+		std::cin >> input;
+		if (input.compare("yes") == 0) {
+			library::print("Shutting down immediately\n");
+			this->m_isRunning = false;
+		}
+		return;
+	}
+
+	// Begins shutdown
+	std::string text = "\nThe server will shutdown in " + std::to_string(DISCONNECT_DELAY) + " seconds\n\n";
+	library::print(text);
+	std::thread t(countdown, this);
+	t.detach();
+	this->m_shutdown = true;
 }
 

@@ -2,6 +2,7 @@
 #include <thread>
 
 #include "ConnectionManager.h"
+#include "library.h"
 
 void determineOption(int input, ConnectionManager& connection) {
 	switch(input) {
@@ -9,7 +10,7 @@ void determineOption(int input, ConnectionManager& connection) {
 		connection.disconnect();
 		break;
 	default:
-		std::cout << "Not a valid option\n";
+		library::print("Not a valid option\n");
 		break;
 	}
 }
@@ -17,15 +18,16 @@ void determineOption(int input, ConnectionManager& connection) {
 void serverInput(ConnectionManager& connection) {
 	while(connection.isRunning()) {
 		// 
-		std::cout << "Enter an option\n";
-		std::cout << "0. Close server (has delay)\n";
+		library::print("Enter an option\n"
+			"0. Close server (has delay)\n"
+		);
 		int input;
 
 		// Check input
 		if (!(std::cin >> input)) {
 			std::cin.clear();
 			std::cin.ignore();
-			std::cout << "Invalid input\n";
+			library::print("Invalid input\n");
 			continue;
 		}
 
@@ -51,7 +53,6 @@ int main(int argc, char** argv) {
 	
 	// Run loop while server is running
 	while (connect.isRunning()) {
-		connect.update();
 	}
 
 	return 0;

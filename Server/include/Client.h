@@ -20,7 +20,12 @@ private:
     sockaddr_in m_addr;
 
 public:
+    Client(const Client& c);
     Client(int socket, sockaddr_in addr, int length);
     ~Client();
+
+    int socket() const noexcept;
+    int socketLength() const noexcept;
+    sockaddr_in addr() const noexcept;
 };
 

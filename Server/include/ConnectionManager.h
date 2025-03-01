@@ -16,6 +16,8 @@
 #define Poll(fd, nfds, timeout) poll(fd, nfds, timeout)
 #endif
 
+#include "Client.h"
+
 constexpr int DEFAULT_PORT  = 7771;
 
 class ConnectionManager {
@@ -30,6 +32,8 @@ private:
     
     // For checking that the server should be running
     bool m_isRunning;
+    // Holds that the shutdown signal has been sent
+    bool m_shutdown;
     // For checking connection properly setup
     bool m_validSetup;
     // Stores connection socket addr
@@ -37,13 +41,14 @@ private:
 
     // ----- Updating ----- Functions -----
 
+    // Countdown for server shutdown
+    void countdown();
+
     // ----- Client ----- Handling -----
 
+    void createChatroom(Client c1, Client c2);
     
-    // Send messages from server to clients
-    void messageSend(const std::string& message);
-    
-    public:
+public:
     // ----- Creation -----
     ConnectionManager(int port = DEFAULT_PORT);
     bool isSetup();
@@ -54,7 +59,6 @@ private:
     void await();
 
     // Main server running
-    void update();
     bool isRunning();
     void disconnect();
 };
