@@ -10,12 +10,15 @@ FLAGS	 = -std=c++23 -I$(INCLUDE) -L$(LIB) -lraylib -lgdi32 -lwinmm
 CXXFLAGS = -c -Wall $(FLAGS)
 LDFLAGS	 = $(FLAGS) -o
 
-OBJECTS	 = main.o
+OBJECTS	 = main.o mainscreen.o
 
 all: $(OBJECTS)
 	$(CXX) $(OBJECTS) $(LDFLAGS) $(EXE)
 
-main.o: $(SRC)/main.cpp
+main.o: $(SRC)/main.cpp mainscreen.o
+	$(CXX) $(CXXFLAGS) $<
+
+mainscreen.o: $(SRC)/mainscreen.cpp $(INCLUDE)/ui/mainscreen.h
 	$(CXX) $(CXXFLAGS) $<
 
 clean:
