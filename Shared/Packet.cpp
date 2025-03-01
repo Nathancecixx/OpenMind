@@ -12,15 +12,15 @@ Packet::~Packet() {
 // ----- Data ----- Manipulation -----
 
 void Packet::serialize(FLAGS flags, TYPE type, const std::string& message) {
-    // Setup data
-    delete [] this->m_data;
-    int length = sizeof(Header) + this->m_head.length + 1;
-    this->m_data = new char[length];
-
     // Add header data
     this->m_head.flags = flags;
     this->m_head.type = type;
     this->m_head.length = message.length() + 1;
+    
+    // Setup data
+    delete [] this->m_data;
+    int length = sizeof(Header) + this->m_head.length + 1;
+    this->m_data = new char[length];
 
     // Add header
     memcpy(this->m_data, &this->m_head, sizeof(Header));
