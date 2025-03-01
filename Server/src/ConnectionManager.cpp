@@ -4,6 +4,7 @@
 #include <sstream>
 
 #include "library.h"
+#include "Chatroom.h"
 
 constexpr int POLL_WAIT			= 100;
 constexpr int DISCONNECT_DELAY	= 3;
@@ -70,7 +71,7 @@ bool ConnectionManager::isRunning() {
 // ----- Updating ----- Server -----
 
 void ConnectionManager::createChatroom(Client c1, Client c2) {
-	
+	Chatroom c(c1, c2);
 }
 
 void ConnectionManager::await() {
