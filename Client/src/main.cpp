@@ -15,6 +15,7 @@ int main(void) {
 		GuiButton({0,0,40,20}, "Button");
 		EndDrawing();
 	}
+
 	CloseWindow();
 
 	return 0;
