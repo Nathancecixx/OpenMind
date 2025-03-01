@@ -9,13 +9,13 @@ The world experiences
 ## Main Product Challenges
 our product in the first itterstion was overly complex, and therfore...
 
-'''C++
+```C++
 std::cout << "Hello world" << std::endl
-'''
+```
 
 ## Architecture
-'''mermaid
+```mermaid
     flowchart LR
         C[(Database)]
         A ---> B --> C
-'''
+```
