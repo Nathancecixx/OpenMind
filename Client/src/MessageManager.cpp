@@ -10,9 +10,18 @@ bool MessageManager::addMessage(std::string str, bool isOwner){
     return true;
 }
 
+bool MessageManager::addPrompt(std::string str){
+    this->prompt = str;
+    return true;
+}
+
 std::vector<Message> MessageManager::getMessages(){
     //Lock mutex before vector edit
     return messageList;
+}
+
+std::string MessageManager::getPrompt(){
+    return prompt;
 }
 
 void MessageManager::resetList(){

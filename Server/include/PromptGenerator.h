@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <random>
 
 
 class Prompt {
@@ -17,6 +18,7 @@ class PromptGenerator {
     std::vector<Prompt> m_prompts;
     std::string m_filePath;
 
+public:
     PromptGenerator(std::string FilePath);
 
     bool LoadPrompts();

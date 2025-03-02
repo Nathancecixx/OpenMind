@@ -16,9 +16,12 @@ int main(void) {
 
 	MessageManager mm;
 
-	NetworkManager nm([&](std::string p, bool isOwner) {
-        mm.addMessage(p, isOwner);
-    });
+	//Initialize Network manager with callback functions
+	NetworkManager nm(
+		[&](std::string p, bool isOwner) { mm.addMessage(p, isOwner); },
+		[&](std::string p) { mm.addPrompt(p); }
+	);
+
 
 	MainScreen mainScreen = MainScreen();
 
@@ -32,6 +35,10 @@ int main(void) {
 		if (success) {
 			mainScreen.GoToChatMenu();
 		}
+	};
+
+	mainScreen.GetPrompt = [&]() {
+		return mm.getPrompt();
 	};
 
 	mainScreen.GetMessages = [&]() {
