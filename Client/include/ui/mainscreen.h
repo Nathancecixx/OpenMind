@@ -40,6 +40,7 @@ public:
     void GoToChatMenu();
     void GoToMainMenu();
     std::string GetCurrentChatMessage();
+    void ClearChatInput();
 
     std::function<void()> OnStartChattingButtonClicked = nullptr;
     std::function<void()> OnChatMessageSent = nullptr;
