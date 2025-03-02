@@ -95,7 +95,6 @@ void Chatroom::chatRecv() {
     while (true) {
         for (Client c : this->m_clients) {
             if ((recvBuf = this->pollRecv(c.socket())) != nullptr) {
-                //?????
                 if (strcmp(recvBuf, "end of message") == 0) {
                     library::print("Exiting room with thread " + threadId);
                     return;
@@ -107,13 +106,16 @@ void Chatroom::chatRecv() {
                 recvBuf = nullptr;
                 this->checkData(c, p);
 
+                //count if not yet progressed
                 if(!isProgressed) count++;
             }
         }
 
+        //If progressed just continue
         if(isProgressed) {
             continue;
         } else if(count >= 5) {
+            //message count hit, send second prompt
             for(Client c : this->m_clients){
                 this->promptSend(c, prompt.second);
                 isProgressed = true;
