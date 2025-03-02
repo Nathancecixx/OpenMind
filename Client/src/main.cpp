@@ -24,10 +24,11 @@ int main(void) {
 
 	mainScreen.OnChatMessageSent = [&]() {
 		nm.sendMessage(mainScreen.GetCurrentChatMessage());
+		mainScreen.ClearChatInput();
 	};
 
 	mainScreen.OnStartChattingButtonClicked = [&]() {
-		bool success = nm.initConnection(7771, "127.0.0.1");
+		bool success = nm.initConnection(7771, "192.168.144.171");
 		if (success) {
 			mainScreen.GoToChatMenu();
 		}
