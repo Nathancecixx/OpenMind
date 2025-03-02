@@ -57,7 +57,7 @@ bool NetworkManager::sendMessage(std::string message){
 
     std::cout << "Sent: " << packet.data() << std::endl;
 
-    if (onMessage != nullptr) {
+    if (packet.data() != nullptr && onMessage != nullptr) {
         onMessage(packet, false);
     }
 }
@@ -89,7 +89,7 @@ void NetworkManager::recieveMessages(){
             return;
         }
 
-        if (onMessage != nullptr) {
+        if (packet.data() != nullptr && onMessage != nullptr) {
             onMessage(packet, false);
         }
 
