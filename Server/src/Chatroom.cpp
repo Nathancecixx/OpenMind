@@ -11,8 +11,6 @@
 Chatroom::Chatroom(Client c1, Client c2) {
     this->m_clients.push_back(c1);
     this->m_clients.push_back(c2);
-    this->chatSend(c1, "Heyo");
-    this->chatSend(c2, "Heyo");
 }
 
 Chatroom::~Chatroom() {
@@ -20,6 +18,7 @@ Chatroom::~Chatroom() {
 }
 
 void Chatroom::chat() {
+    // Create receive thread
     std::thread receiveThread(&Chatroom::chatRecv, this);
     receiveThread.detach();
 
@@ -36,12 +35,16 @@ void Chatroom::chat() {
 // ----- Chatroom ----- Functions -----
 
 void Chatroom::echo(const Client& sentFrom, const std::string& message) {
-
+    for (Client c : this->m_clients) {
+        if (c.socket() != sentFrom.socket()) {
+            this->chatSend(c, message);
+        }
+    }
 }
 
 void Chatroom::chatSend(const Client& client, const std::string& message) {
     Packet data;
-    data.serialize(Packet::NONE, Packet::MESSAGE, message);
+    data.serialize(0, Packet::MESSAGE, message);
     if (data.data() == nullptr) {
         std::cout << "No data to send\n";
         return;
@@ -53,16 +56,24 @@ void Chatroom::chatRecv() {
     // Print thread data
     std::stringstream ss;
     ss << std::this_thread::get_id();
-    library::print("Receive thread created on thread " + ss.str() + '\n');
+    std::string threadId = ss.str();
+    library::print("Receive thread created on thread " + threadId + '\n');
 
     // Get receive data
     char* recvBuf;
     while (true) {
         for (Client c : this->m_clients) {
             if ((recvBuf = this->pollRecv(c.socket())) != nullptr) {
+                if (strcmp(recvBuf, "end of message") == 0) {
+                    library::print("Exiting room with thread " + threadId);
+                    return;
+                }
+
+                // Packet info
                 Packet p;
                 p.deserialize(recvBuf);
-                this->checkData(p);
+                recvBuf = nullptr;
+                this->checkData(c, p);
             }
         }
     }
@@ -75,22 +86,20 @@ char* Chatroom::pollRecv(int fd) {
     static char RxBuffer[MAX_RECV];
 
     if (Poll(fds, 1, POLL_WAIT / this->m_clients.size())) {
-        recv(fd, RxBuffer, MAX_RECV, 0);
+        int size = recv(fd, RxBuffer, MAX_RECV, 0);
+        if (size <= 0) {
+            return (char*)"end of message";
+        }
         return RxBuffer;
     }
 
     return nullptr;
 }
 
-void Chatroom::checkData(const Packet& packet) {
-    std::stringstream data; data << "Type: " << packet.type();
-    int flag = packet.length();
-    if (packet.length() == 5) {
-        std::cout << "HEYOO!!!\n";
-    }
-    std::cout << "Check: " << flag << "\n";
-    data << ", Data: " << packet.data() << ", Flags: " << packet.flags() << ", Length: " << packet.length() << '\n';
+void Chatroom::checkData(const Client& client, const Packet& packet) {
+    std::stringstream data; 
+    data << "Type: " << packet.type() << ", Data: " << packet.data() << ", Flags: " << packet.flags() << ", Length: " << packet.length() << '\n';
     library::print(data.str());
-    Sleep(10000);
+    echo(client, packet.data());
 }
 

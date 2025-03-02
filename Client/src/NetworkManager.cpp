@@ -1,7 +1,7 @@
 #include <iostream>
 #include "NetworkManager.hpp"
 
-NetworkManager::NetworkManager(std::function<void(Packet, bool)> messageCallback) {
+NetworkManager::NetworkManager(std::function<void(std::string, bool)> messageCallback) {
     onMessage = messageCallback;
 }
 
@@ -41,7 +41,7 @@ bool NetworkManager::initConnection(int Port, const char* ip){
 bool NetworkManager::sendMessage(std::string message){
     //Create a new packet and serialize 
     Packet packet;
-    packet.serialize(Packet::FLAGS::NONE, Packet::MESSAGE, message);
+    packet.serialize(0, Packet::MESSAGE, message);
     
     if(packet.data() == nullptr) {
         std::cerr << "Failed to serialize packet" << std::endl;
@@ -58,8 +58,9 @@ bool NetworkManager::sendMessage(std::string message){
     std::cout << "Sent: " << packet.data() << std::endl;
 
     if (packet.data() != nullptr && onMessage != nullptr) {
-        onMessage(packet, false);
+        onMessage(message, true);
     }
+    return true;
 }
 
 void NetworkManager::recieveMessages(){
@@ -90,7 +91,7 @@ void NetworkManager::recieveMessages(){
         }
 
         if (packet.data() != nullptr && onMessage != nullptr) {
-            onMessage(packet, false);
+            onMessage(packet.data(), false);
         }
 
     }

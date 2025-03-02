@@ -16,8 +16,8 @@ int main(void) {
 
 	MessageManager mm;
 
-	NetworkManager nm([&](Packet p, bool isOwner) {
-        mm.addMessage(p.data(), isOwner);
+	NetworkManager nm([&](std::string p, bool isOwner) {
+        mm.addMessage(p, isOwner);
     });
 
 	MainScreen mainScreen = MainScreen();

@@ -4,8 +4,6 @@
 
 class Packet {
 public:
-    // Flags
-    enum FLAGS { NONE };
     // Type
     enum TYPE { INVALID, CONNECT, DISCONNECT, SERVER_CLOSE, MESSAGE, PROMPT };
 
@@ -28,7 +26,7 @@ public:
 
     // ----- Data ----- Manipulation -----
 
-    void serialize(FLAGS flags, TYPE type, const std::string& message);
+    void serialize(int packetNum, TYPE type, const std::string& message);
     void deserialize(char* received);
 
     // ----- Getters -----

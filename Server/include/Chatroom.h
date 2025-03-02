@@ -26,7 +26,7 @@ private:
     char* pollRecv(int fd);
 
     // Check received data
-    void checkData(const Packet& packet);
+    void checkData(const Client& client, const Packet& packet);
 
 public:
     // Takes 2 clients into chatroom

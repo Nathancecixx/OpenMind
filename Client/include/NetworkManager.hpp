@@ -56,7 +56,7 @@
 
 class NetworkManager{
 private:
-    std::function<void(Packet, bool)> onMessage;
+    std::function<void(std::string, bool)> onMessage;
     WSADATA wsaData;
     SOCKET sock;
     std::atomic<bool> running;
@@ -64,7 +64,7 @@ private:
     std::thread senderThread;
 
 public:
-    NetworkManager(std::function<void(Packet, bool)> messageCallback);
+    NetworkManager(std::function<void(std::string, bool)> messageCallback);
     
     bool initConnection(int Port, const char* ip);
 
