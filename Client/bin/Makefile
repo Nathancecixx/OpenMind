@@ -7,7 +7,7 @@ INCLUDE	 = ../include
 LIB		 = ../lib
 SHARED	 = ../../Shared
 
-FLAGS	 = -std=c++23 -I$(INCLUDE) -I$(SHARED) -L$(LIB) -lraylib -lgdi32 -lwinmm -lws2_32
+FLAGS	 = -std=c++23 -I$(INCLUDE) -I$(SHARED) -L$(LIB) -lraylib -lgdi32 -lwinmm -lws2_32 -mwindows
 CXXFLAGS = -c -Wall $(FLAGS)
 LDFLAGS	 = $(FLAGS) -o
 
