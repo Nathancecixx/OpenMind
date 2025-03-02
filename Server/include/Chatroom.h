@@ -1,11 +1,14 @@
 #pragma once
 
+#include <iostream>
+#include <vector>
+
 #include "Client.h"
 #include "Packet.h"
 
 class Chatroom {
 private:
-    Client m_client1, m_client2;
+    std::vector<Client> m_clients;
 
     // Echo message to everyone in chatroom
     void echo(const Client& sentFrom, const std::string& message);

@@ -8,7 +8,9 @@
 
 // ----- Creation ----- Destruction -----
 
-Chatroom::Chatroom(Client c1, Client c2) : m_client1(c1), m_client2(c2) {
+Chatroom::Chatroom(Client c1, Client c2) {
+    this->m_clients.push_back(c1);
+    this->m_clients.push_back(c2);
     this->chatSend(c1, "Heyo");
     this->chatSend(c2, "Heyo");
 }
@@ -48,17 +50,20 @@ void Chatroom::chatSend(const Client& client, const std::string& message) {
 }
 
 void Chatroom::chatRecv() {
+    // Print thread data
     std::stringstream ss;
     ss << std::this_thread::get_id();
     library::print("Receive thread created on thread " + ss.str() + '\n');
 
+    // Get receive data
     char* recvBuf;
     while (true) {
-        // Poll c1
-        if ((recvBuf = this->pollRecv(this->m_client2.socket()))) {
-            Packet p;
-            p.deserialize(recvBuf);
-            this->checkData(p);
+        for (Client c : this->m_clients) {
+            if ((recvBuf = this->pollRecv(c.socket())) != nullptr) {
+                Packet p;
+                p.deserialize(recvBuf);
+                this->checkData(p);
+            }
         }
     }
 }
@@ -69,7 +74,7 @@ char* Chatroom::pollRecv(int fd) {
     fds[0].fd = fd;
     static char RxBuffer[MAX_RECV];
 
-    if (Poll(fds, 1, POLL_WAIT)) {
+    if (Poll(fds, 1, POLL_WAIT / this->m_clients.size())) {
         recv(fd, RxBuffer, MAX_RECV, 0);
         return RxBuffer;
     }

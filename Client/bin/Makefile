@@ -11,7 +11,7 @@ FLAGS	 = -std=c++23 -I$(INCLUDE) -I$(SHARED) -L$(LIB) -lraylib -lgdi32 -lwinmm -
 CXXFLAGS = -c -Wall $(FLAGS)
 LDFLAGS	 = $(FLAGS) -o
 
-OBJECTS	 = main.o NetworkManager.o MessageManager.o mainscreen.o Packet.o
+OBJECTS	 = main.o NetworkManager.o MessageManager.o mainscreen.o Packet.o Message.o
 
 all: $(OBJECTS)
 	$(CXX) $(OBJECTS) $(LDFLAGS) $(EXE)
@@ -29,6 +29,9 @@ mainscreen.o: $(SRC)/mainscreen.cpp $(INCLUDE)/ui/mainscreen.h
 	$(CXX) $(CXXFLAGS) $<
 
 Packet.o: $(SHARED)/Packet.cpp $(SHARED)/Packet.h
+	$(CXX) $(CXXFLAGS) $<
+
+Message.o: $(SHARED)/Message.cpp $(SHARED)/Message.h
 	$(CXX) $(CXXFLAGS) $<
 
 clean:
