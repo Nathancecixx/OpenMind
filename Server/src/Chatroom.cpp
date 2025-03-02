@@ -87,6 +87,9 @@ void Chatroom::chatRecv() {
     std::string threadId = ss.str();
     library::print("Receive thread created on thread " + threadId + '\n');
 
+    int count = 0;
+    bool isProgressed = false;
+
     // Get receive data
     char* recvBuf;
     while (true) {
@@ -102,6 +105,20 @@ void Chatroom::chatRecv() {
                 p.deserialize(recvBuf);
                 recvBuf = nullptr;
                 this->checkData(c, p);
+
+                //count if not yet progressed
+                if(!isProgressed) count++;
+            }
+        }
+
+        //If progressed just continue
+        if(isProgressed) {
+            continue;
+        } else if(count >= 5) {
+            //message count hit, send second prompt
+            for(Client c : this->m_clients){
+                this->promptSend(c, prompt.second);
+                isProgressed = true;
             }
         }
     }
