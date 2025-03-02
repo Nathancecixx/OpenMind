@@ -29,7 +29,7 @@ ConnectionManager.o: $(SRC)/ConnectionManager.cpp $(INCLUDE)/ConnectionManager.h
 Packet.o: $(SHARED)/Packet.cpp
 	$(CXX) $(CXXFLAGS) $<
 
-Chatroom.o: $(SRC)/Chatroom.cpp $(INCLUDE)/Chatroom.h Client.o
+Chatroom.o: $(SRC)/Chatroom.cpp $(INCLUDE)/Chatroom.h Client.o Packet.o
 	$(CXX) $(CXXFLAGS) $<
 
 Client.o: $(SRC)/Client.cpp $(INCLUDE)/Client.h

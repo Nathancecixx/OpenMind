@@ -13,13 +13,15 @@ Packet::~Packet() {
 
 void Packet::serialize(FLAGS flags, TYPE type, const std::string& message) {
     // Add header data
-    this->m_head.flags = flags;
-    this->m_head.type = type;
-    this->m_head.length = message.length() + 1;
+    this->m_head.data = 0;
+    this->m_head.data |= flags << 13;
+    this->m_head.data |= type << 10;
+    int length = message.length() + 1;
+    this->m_head.data |= length;
+    std::cout << "Val: " << (this->m_head.data >> 10) << '\n';
     
     // Setup data
     delete [] this->m_data;
-    int length = sizeof(Header) + this->m_head.length + 1;
     this->m_data = new char[length];
 
     // Add header
@@ -27,7 +29,8 @@ void Packet::serialize(FLAGS flags, TYPE type, const std::string& message) {
     int increment = sizeof(Header);
     
     // Add body data
-    memcpy((this->m_data + increment), message.c_str() + '\0', this->m_head.length);
+
+    memcpy((this->m_data + increment), message.c_str() + '\0', length);
 }
 
 void Packet::deserialize(char* received) {
@@ -37,25 +40,26 @@ void Packet::deserialize(char* received) {
     
     // Add data
     delete [] this->m_data;
-    this->m_data = new char[this->m_head.length];
-    memcpy(this->m_data, received + increment, this->m_head.length);
+    int length = this->m_head.data & 0x3ff;
+    this->m_data = new char[length];
+    memcpy(this->m_data, received + increment, length);
 }
 
 // ----- Getters -----
 
-int Packet::flags() {
-    return this->m_head.flags;
+int Packet::flags() const noexcept {
+    return ((this->m_head.data >> 13) & 0x7);
 }
 
-int Packet::type() {
-    return this->m_head.type;
+int Packet::type() const noexcept {
+    return ((this->m_head.data >> 10) & 0x7);
 }
 
-int Packet::length() {
-    return this->m_head.length;
+int Packet::length() const noexcept {
+    return (this->m_head.data & 0x3ff);
 }
 
-char* Packet::data() {
+char* Packet::data() const noexcept {
     return this->m_data;
 }
 

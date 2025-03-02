@@ -7,7 +7,7 @@ public:
     // Flags
     enum FLAGS { NONE };
     // Type
-    enum TYPE { INVALID, CONNECT, DECONNECT, SERVER_CLOSE, MESSAGE };
+    enum TYPE { INVALID, CONNECT, DISCONNECT, SERVER_CLOSE, MESSAGE, PROMPT };
 
 private:
     // Holds the databuffer
@@ -15,9 +15,7 @@ private:
 
     // Holds header data
     typedef struct {
-        unsigned short flags : 3;
-        unsigned short type : 3;
-        unsigned short length : 10;
+        unsigned short data;
     } Header;
 
     Header m_head;
@@ -35,9 +33,9 @@ public:
 
     // ----- Getters -----
 
-    int flags();
-    int type();
-    int length();
-    char* data();
+    int flags() const noexcept;
+    int type() const noexcept;
+    int length() const noexcept;
+    char* data() const noexcept;
 };
 
