@@ -83,6 +83,9 @@ void MainScreen::DrawChat() {
 
     contentHeight = 0;
     std::vector<Message> messages = GetMessages();
+    if (messages.empty()) {
+        return;
+    }
     /*std::vector<Message> messages = std::vector<Message>();
     for (int i = 0; i < 20; i++) {
         messages.push_back(Message("Hello World!", "Today", i % 2 == 0 ? true : false));
