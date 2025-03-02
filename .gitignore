@@ -31,5 +31,24 @@
 *.out
 *.app
 
-# Others
-.vscode
+# VS Code settings
+.vscode/
+
+# Python Virtual Environment
+venv/
+.env/
+.venv/
+
+# Python Bytecode and Cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter Notebook Checkpoints
+.ipynb_checkpoints/
+
+# Logs and Misc
+*.log
+.DS_Store
+Thumbs.db
