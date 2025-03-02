@@ -56,7 +56,7 @@ bool NetworkManager::sendMessage(std::string message){
         return false;
     }
 
-    std::cout << "Sent: " << packet.data() << std::endl;
+    //std::cout << "Sent: " << packet.data() << std::endl;
 
     if (packet.data() != nullptr && onMessage != nullptr) {
         onMessage(message, true);
@@ -78,7 +78,7 @@ void NetworkManager::recieveMessages(){
             break;
         } 
 
-        std::cout << "Recieved Raw: " << buffer << std::endl;
+        //std::cout << "Recieved Raw: " << buffer << std::endl;
 
         //Create packet and deserialize the buffer
         Packet packet;

@@ -21,7 +21,7 @@ void Packet::serialize(int packetNum, TYPE type, const std::string& message) {
     
     // Setup data
     delete [] this->m_data;
-    this->m_data = new char[length];
+    this->m_data = new char[sizeof(Header) + length];
 
     // Add header
     memcpy(this->m_data, &this->m_head, sizeof(Header));
@@ -40,7 +40,7 @@ void Packet::deserialize(char* received) {
     // Add data
     delete [] this->m_data;
     int length = this->m_head.data & 0x3ff;
-    this->m_data = new char[length];
+    this->m_data = new char[length + 1];
     memcpy(this->m_data, received + increment, length);
     this->m_data[length] = '\0';
 }
