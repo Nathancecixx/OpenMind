@@ -47,7 +47,11 @@ bool NetworkManager::sendMessage(std::string message){
     }
 
     //Send serialized data over socket
-    send(sock, packet.data(), sizeof(packet.data()), 0);
+    int bytes_sent = send(sock, packet.data(), sizeof(packet.data()), 0);
+    if(bytes_sent <= 0){
+        std::cout << "Failed to send bytes" << std::endl;
+        return false;
+    }
 
     std::cout << "Sent: " << packet.data() << std::endl;
 
@@ -61,11 +65,20 @@ void NetworkManager::recieveMessages(){
         char buffer[MAX_MESSAGE_LEN];
         int bytes_recieved = recv(sock, buffer, sizeof(buffer), 0);
 
-        //Create packet and deseialize the buffer
+        //Check amount recieved
+        if(bytes_recieved <= 0){
+            std::cout << "Failed to recieve bytes" << std::endl;
+            running = false;
+            break;
+        } 
+
+        std::cout << "Recieved Raw: " << buffer << std::endl;
+
+        //Create packet and deserialize the buffer
         Packet packet;
         packet.deserialize(buffer);
 
-        std::cout << "Recieved: " << packet.data() << std::endl;
+        std::cout << "Recieved Serialized: " << packet.data() << std::endl;
 
         if(packet.data() == nullptr) {
             std::cerr << "Failed to deserialize packet" << std::endl;
