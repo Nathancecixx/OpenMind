@@ -28,7 +28,7 @@ void Packet::serialize(int packetNum, TYPE type, const std::string& message) {
     int increment = sizeof(Header);
     
     // Add body data
-    memcpy((this->m_data + increment), message.c_str() + '\0', length);
+    memcpy((this->m_data + increment), message.c_str(), length);
 }
 
 void Packet::deserialize(char* received) {
