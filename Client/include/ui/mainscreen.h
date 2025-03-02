@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <functional>
+#include "Message.h"
 
 class MainScreen {
 private:
@@ -29,7 +30,7 @@ public:
     bool editChatMessageInputField = false;
     Vector2 chatScroll = { 0 };
     Rectangle chatView = { 0 };
-    float contentWidth = 64.0f;
+    float contentHeight = 64.0f;
 
     void Draw();
     void DrawLogin();
@@ -37,8 +38,10 @@ public:
     void DrawChat();
 
     void GoToChatMenu();
+    void GoToMainMenu();
     std::string GetCurrentChatMessage();
 
     std::function<void()> OnStartChattingButtonClicked = nullptr;
     std::function<void()> OnChatMessageSent = nullptr;
+    std::function<std::vector<Message>()> GetMessages = nullptr;
 };
