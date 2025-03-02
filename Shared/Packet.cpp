@@ -16,7 +16,7 @@ void Packet::serialize(int packetNum, TYPE type, const std::string& message) {
     this->m_head.data = 0;
     this->m_head.data |= packetNum << 13;
     this->m_head.data |= type << 10;
-    int length = message.length() + 1;
+    int length = message.length();
     this->m_head.data |= length;
     
     // Setup data
@@ -33,7 +33,8 @@ void Packet::serialize(int packetNum, TYPE type, const std::string& message) {
 
 void Packet::deserialize(char* received) {
     // Get header data
-    memcpy(&this->m_head, received, sizeof(Header));
+    this->m_head.data = 0;
+    memcpy(&this->m_head.data, received, sizeof(Header));
     int increment = sizeof(Header);
     
     // Add data
@@ -41,6 +42,7 @@ void Packet::deserialize(char* received) {
     int length = this->m_head.data & 0x3ff;
     this->m_data = new char[length];
     memcpy(this->m_data, received + increment, length);
+    this->m_data[length] = '\0';
 }
 
 // ----- Getters -----

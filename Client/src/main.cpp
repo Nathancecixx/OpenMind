@@ -28,7 +28,7 @@ int main(void) {
 	};
 
 	mainScreen.OnStartChattingButtonClicked = [&]() {
-		bool success = nm.initConnection(7771, "192.168.144.171");
+		bool success = nm.initConnection(7771, "127.0.0.1");
 		if (success) {
 			mainScreen.GoToChatMenu();
 		}

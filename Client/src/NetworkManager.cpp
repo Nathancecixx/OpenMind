@@ -67,9 +67,9 @@ void NetworkManager::recieveMessages(){
     //Loop while server is running
     while(running){
         //Recieve over connection into buffer 
-        char buffer[MAX_MESSAGE_LEN];
+        char buffer[MAX_MESSAGE_LEN] = {0};
         int bytes_recieved = recv(sock, buffer, sizeof(buffer), 0);
-
+        
         //Check amount recieved
         if(bytes_recieved <= 0){
             std::cout << "Failed to recieve bytes" << std::endl;
@@ -82,18 +82,18 @@ void NetworkManager::recieveMessages(){
         //Create packet and deserialize the buffer
         Packet packet;
         packet.deserialize(buffer);
-
+        
         std::cout << "Recieved Serialized: " << packet.data() << std::endl;
-
+        
         if(packet.data() == nullptr) {
             std::cerr << "Failed to deserialize packet" << std::endl;
             return;
         }
-
+        
         if (packet.data() != nullptr && onMessage != nullptr) {
             onMessage(packet.data(), false);
         }
-
+        memset(buffer, 0, 1000);
     }
 }
 
