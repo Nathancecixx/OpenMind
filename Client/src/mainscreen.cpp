@@ -75,11 +75,27 @@ void MainScreen::DrawChat() {
         }
     }
 
+    GuiScrollPanel({224, 16, 512, 624}, "Chat", {224, 16, 497, contentHeight}, &chatScroll, &chatView);
 
+    if (GetMessages == nullptr) {
+        return;
+    }
 
-    GuiScrollPanel({224, 16, 512, 624}, "Chat", {224, 16, 512, contentWidth}, &chatScroll, &chatView);
+    contentHeight = 0;
+    std::vector<Message> messages = GetMessages();
+    /*std::vector<Message> messages = std::vector<Message>();
+    for (int i = 0; i < 20; i++) {
+        messages.push_back(Message("Hello World!", "Today", i % 2 == 0 ? true : false));
+    }*/
+
     BeginScissorMode(chatView.x, chatView.y, chatView.width, chatView.height);
+        int spacing = 48;
 
+        for (int i = 0; i < messages.size(); i++) {
+            GuiSetStyle(STATUSBAR, TEXT_ALIGNMENT, messages[i].isOwner ? TEXT_ALIGN_LEFT : TEXT_ALIGN_RIGHT);
+            GuiStatusBar({chatView.x, chatView.y + chatScroll.y + (i * spacing), chatView.width, 32}, messages[i].str.c_str());
+            contentHeight += spacing;
+        }
     EndScissorMode();
 }
 
@@ -89,4 +105,8 @@ std::string MainScreen::GetCurrentChatMessage() {
 
 void MainScreen::GoToChatMenu() {
     currentMenu = Chat;
+}
+
+void MainScreen::GoToMainMenu() {
+    currentMenu = Main;
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 class Message {
-private:
+public:
     std::string str;
     std::string date;
     bool isOwner;
