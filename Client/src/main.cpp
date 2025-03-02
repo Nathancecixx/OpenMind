@@ -9,10 +9,19 @@
 #include "MessageManager.hpp"
 #include "ui/mainscreen.h"
 
+#define LOGO "../assets/OpenMindLogo.png"
+
 int main(void) {
 	const int screenWidth = 960;
 	const int screenHeight = 720;
 	InitWindow(screenWidth, screenHeight, "Open Mind");
+
+	//Set the windo logo
+    Image icon = LoadImage("../assets/OpenMindLogo.png");
+    SetWindowIcon(icon);
+    UnloadImage(icon); 
+
+
 
 	MessageManager mm;
 
