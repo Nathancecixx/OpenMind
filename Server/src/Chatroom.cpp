@@ -2,7 +2,7 @@
 
 #include <thread>
 #include <sstream>
-
+#include <Python.h>
 #include "Defines.h"
 #include "library.h"
 
@@ -96,10 +96,55 @@ char* Chatroom::pollRecv(int fd) {
     return nullptr;
 }
 
+double analyzeSentiment(const std::string& text) {
+    Py_Initialize();
+    
+    PyObject *pName, *pModule, *pFunc, *pArgs, *pValue;
+    
+    // Load the Python script 'func.py' (without .py extension)
+    pName = PyUnicode_DecodeFSDefault("func");
+    pModule = PyImport_Import(pName);
+    Py_XDECREF(pName);
+
+    if (pModule) {
+        // Get the function 'get_compound_score' from func.py
+        pFunc = PyObject_GetAttrString(pModule, "get_compound_score");
+        if (pFunc && PyCallable_Check(pFunc)) {
+            // Create arguments for the function
+            pArgs = PyTuple_Pack(1, PyUnicode_FromString(text.c_str()));
+            pValue = PyObject_CallObject(pFunc, pArgs);
+            Py_XDECREF(pArgs);
+            
+            if (pValue) {
+                double result = PyFloat_AsDouble(pValue);
+                Py_XDECREF(pValue);
+                Py_XDECREF(pModule);
+                Py_Finalize();
+                return result;
+            }
+        }
+    }
+
+    Py_XDECREF(pModule);
+    Py_Finalize();
+    return 0.0;  // Default return on failure
+}
 void Chatroom::checkData(const Client& client, const Packet& packet) {
     std::stringstream data; 
     data << "Type: " << packet.type() << ", Data: " << packet.data() << ", Flags: " << packet.flags() << ", Length: " << packet.length() << '\n';
     library::print(data.str());
-    echo(client, packet.data());
+    double sentimentScore = analyzeSentiment(packet.data());
+
+    constexpr double NEGATIVE_THRESHOLD = -0.7;
+
+    if (sentimentScore < NEGATIVE_THRESHOLD)
+    {
+        std::string warnMsg = "Your message was not sent because it was not civil";
+        std::cout << warnMsg << std::endl;
+    }
+    else
+    {
+        echo(client, packet.data());
+    }
 }
 
