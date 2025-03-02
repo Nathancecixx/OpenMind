@@ -12,7 +12,7 @@ FLAGS	 = -std=c++20 -I$(INCLUDE) -I$(SHARED) -L$(LIB) -lws2_32
 CXXFLAGS = -c -Wall $(FLAGS)
 LDFLAGS	 = $(FLAGS) -o
 
-OBJECTS	 = main.o library.o Packet.o ConnectionManager.o Client.o Chatroom.o
+OBJECTS	 = main.o library.o Packet.o ConnectionManager.o Client.o Chatroom.o PromptGenerator.o
 
 all: $(OBJECTS)
 	$(CXX) $(OBJECTS) $(LDFLAGS) $(EXE)
@@ -30,6 +30,9 @@ Packet.o: $(SHARED)/Packet.cpp
 	$(CXX) $(CXXFLAGS) $<
 
 Chatroom.o: $(SRC)/Chatroom.cpp $(INCLUDE)/Chatroom.h Client.o Packet.o
+	$(CXX) $(CXXFLAGS) $<
+
+PromptGenerator.o: $(SRC)/PromptGenerator.cpp $(INCLUDE)/PromptGenerator.h
 	$(CXX) $(CXXFLAGS) $<
 
 Client.o: $(SRC)/Client.cpp $(INCLUDE)/Client.h
