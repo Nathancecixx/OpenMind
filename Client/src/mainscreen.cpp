@@ -1,6 +1,5 @@
 #include "ui/mainscreen.h"
 #include <raylib/raygui.h>
-#include <string.h>
 
 MainScreen::MainScreen() {
     GuiLoadStyle("../assets/style_amber.rgs");
@@ -66,8 +65,18 @@ void MainScreen::DrawMainMenu() {
 
 void MainScreen::DrawChat() {
 
+    //Get the current rooms prompt
     std::string prompt = GetPrompt();
-    GuiLabel({10, 10, 64, 64}, prompt.c_str());
+
+    GuiLabel({10, 10, 256, 32}, "Prompt:");
+
+    Rectangle promptBox = {10, 50, 200, 300};
+    // Draw a box
+    DrawRectangleRec(promptBox, LIGHTGRAY);
+    DrawRectangleLines(promptBox.x, promptBox.y, promptBox.width, promptBox.height, DARKGRAY);
+
+    // Draw wrapped text inside the box
+    DrawWrappedText(prompt, promptBox, 20, BLACK);
 
     if (GuiTextBox({224, 656, 512, 64}, currentChatMessage, 1000, editChatMessageInputField)) {
         editChatMessageInputField = !editChatMessageInputField;
@@ -120,4 +129,39 @@ void MainScreen::GoToMainMenu() {
 
 void MainScreen::ClearChatInput() {
     memset(currentChatMessage, 0, 1000);
+}
+
+// Function to wrap text within a specified width
+std::vector<std::string> MainScreen::WrapText(const std::string& text, int maxWidth, int fontSize) {
+    std::vector<std::string> lines;
+    std::istringstream words(text);
+    std::string word, currentLine;
+    
+    while (words >> word) {
+        std::string testLine = currentLine.empty() ? word : currentLine + " " + word;
+
+        // Check if the new line would exceed the max width
+        if (MeasureText(testLine.c_str(), fontSize) > maxWidth) {
+            if (!currentLine.empty()) {
+                lines.push_back(currentLine);
+            }
+            currentLine = word; // Start a new line with the current word
+        } else {
+            currentLine = testLine;
+        }
+    }
+    if (!currentLine.empty()) {
+        lines.push_back(currentLine);
+    }
+
+    return lines;
+}
+
+void MainScreen::DrawWrappedText(const std::string& text, Rectangle box, int fontSize, Color color) {
+    std::vector<std::string> lines = WrapText(text, box.width, fontSize);
+    int lineSpacing = fontSize + 4; // Adjust line spacing
+
+    for (size_t i = 0; i < lines.size(); ++i) {
+        DrawText(lines[i].c_str(), box.x + 5, box.y + 5 + (i * lineSpacing), fontSize, color);
+    }
 }

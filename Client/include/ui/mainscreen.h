@@ -4,6 +4,8 @@
 #include <iostream>
 #include <vector>
 #include <functional>
+#include <string.h>
+#include <sstream>
 #include "Message.h"
 
 class MainScreen {
@@ -46,4 +48,11 @@ public:
     std::function<void()> OnChatMessageSent = nullptr;
     std::function<std::vector<Message>()> GetMessages = nullptr;
     std::function<std::string()> GetPrompt = nullptr;
+
+private:
+
+// Function to wrap text within a specified width
+std::vector<std::string> WrapText(const std::string& text, int maxWidth, int fontSize);
+
+void DrawWrappedText(const std::string& text, Rectangle box, int fontSize, Color color);
 };
