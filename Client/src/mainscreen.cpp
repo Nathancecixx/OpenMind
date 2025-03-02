@@ -43,6 +43,9 @@ void MainScreen::DrawLogin() {
 
     //std::cout << realPassword << std::endl;
 
+    //Draw Shadow
+    DrawRectangleRec({400 + 5, 448 + 5, 160, 64}, Fade(BLACK, 0.2f));
+    //Draw Button
     if (GuiButton({400, 448, 160, 64}, "Login")) {
         if (strlen(email) > 0 && !password.empty()) {
             currentMenu = Main;
@@ -56,6 +59,7 @@ void MainScreen::DrawMainMenu() {
     GuiPanel({16, 16, 256, 384}, "Profile");
     GuiLabel({24, 36, 256, 32}, "Name: John Doe");
 
+    DrawRectangleRec({624 + 5, 608 + 5, 320, 96}, Fade(BLACK, 0.2f));
     if (GuiButton({624, 608, 320, 96}, "Start Chatting")) {
         if (OnStartChattingButtonClicked != nullptr) {
             OnStartChattingButtonClicked();
@@ -82,6 +86,9 @@ void MainScreen::DrawChat() {
         editChatMessageInputField = !editChatMessageInputField;
     }
 
+    //Draw Shadow
+    DrawRectangleRec({768 + 5, 656 + 5, 64, 64}, Fade(BLACK, 0.2f));
+    //Draw Button
     if (GuiButton({768, 656, 64, 64}, "Send")) {
         if (OnChatMessageSent != nullptr) {
             OnChatMessageSent();
