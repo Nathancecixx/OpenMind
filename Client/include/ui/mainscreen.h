@@ -45,4 +45,5 @@ public:
     std::function<void()> OnStartChattingButtonClicked = nullptr;
     std::function<void()> OnChatMessageSent = nullptr;
     std::function<std::vector<Message>()> GetMessages = nullptr;
+    std::function<std::string()> GetPrompt = nullptr;
 };

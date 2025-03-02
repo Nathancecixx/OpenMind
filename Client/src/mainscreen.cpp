@@ -65,6 +65,10 @@ void MainScreen::DrawMainMenu() {
 }
 
 void MainScreen::DrawChat() {
+
+    std::string prompt = GetPrompt();
+    GuiLabel({10, 10, 64, 64}, prompt.c_str());
+
     if (GuiTextBox({224, 656, 512, 64}, currentChatMessage, 1000, editChatMessageInputField)) {
         editChatMessageInputField = !editChatMessageInputField;
     }

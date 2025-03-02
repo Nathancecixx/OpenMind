@@ -1,8 +1,9 @@
 #include <iostream>
 #include "NetworkManager.hpp"
 
-NetworkManager::NetworkManager(std::function<void(std::string, bool)> messageCallback) {
+NetworkManager::NetworkManager(std::function<void(std::string, bool)> messageCallback, std::function<void(std::string)> promptCallback) {
     onMessage = messageCallback;
+    onPrompt = promptCallback;
 }
 
 bool NetworkManager::initConnection(int Port, const char* ip){
@@ -90,12 +91,21 @@ void NetworkManager::recieveMessages(){
             return;
         }
 
-        if (packet.data() != nullptr && onMessage != nullptr) {
+        if (onMessage == nullptr || onPrompt == nullptr) {
+            std::cerr << "Failed to create packet" << std::endl;
+            return;
+        }
+
+        //Parse packet type
+        if(packet.type() == Packet::MESSAGE){
             onMessage(packet.data(), false);
+        }else if(packet.type() == Packet::PROMPT){
+            onPrompt(packet.data());
         }
 
     }
-}
+};
+
 
 bool NetworkManager::disconnect(){
     running = false;

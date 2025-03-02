@@ -9,6 +9,7 @@ bool PromptGenerator::LoadPrompts(){
     std::ifstream file(m_filePath);
     if (!file) {
         std::cerr << "Error opening file!" << std::endl;
+        return false;
     }
 
     std::string line;
@@ -22,8 +23,20 @@ bool PromptGenerator::LoadPrompts(){
     }
 
     file.close();
+    return true;
 }
 
-Prompt GetRandomPrompt(){
+Prompt PromptGenerator::GetRandomPrompt(){
+    // If there are no prompts loaded, return a default or "empty" prompt.
+    if (m_prompts.empty()) {
+        return Prompt("", "");
+    }
 
+    // Set up a random engine and distribution (thread-safe approach).
+    static std::random_device rd;  
+    static std::mt19937 gen(rd());
+    std::uniform_int_distribution<size_t> dist(0, m_prompts.size() - 1);
+
+    // Pick a random prompt from the vector
+    return m_prompts[dist(gen)];
 }
