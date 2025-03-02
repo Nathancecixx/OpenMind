@@ -12,13 +12,11 @@ bool MessageManager::addMessage(std::string str, bool isOwner){
 
 std::vector<Message> MessageManager::getMessages(){
     //Lock mutex before vector edit
-    std::lock_guard<std::mutex> lock(messageListMutex);
     return messageList;
 }
 
 void MessageManager::resetList(){
     //Lock mutex before vector edit
-    std::lock_guard<std::mutex> lock(messageListMutex);
     messageList.clear();
 }
 

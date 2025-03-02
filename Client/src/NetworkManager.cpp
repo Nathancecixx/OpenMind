@@ -49,7 +49,7 @@ bool NetworkManager::sendMessage(std::string message){
     }
 
     //Send serialized data over socket
-    int bytes_sent = send(sock, packet.data(), sizeof(packet.data()), 0);
+    int bytes_sent = send(sock, packet.data(), strlen(packet.data()), 0);
     if(bytes_sent <= 0){
         std::cout << "Failed to send bytes" << std::endl;
         return false;
