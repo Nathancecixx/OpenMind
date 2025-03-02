@@ -3,7 +3,7 @@
 
 NetworkManager::NetworkManager(std::function<void(Packet, bool)> messageCallback) : onMessage(messageCallback) {} // Store the callback
 
-bool NetworkManager::initConnection(int Port, char* ip){
+bool NetworkManager::initConnection(int Port, const char* ip){
     //WSA Startup
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
         std::cerr << "WSAStartup failed!" << std::endl;

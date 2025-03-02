@@ -66,7 +66,7 @@ private:
 public:
     NetworkManager(std::function<void(Packet, bool)> messageCallback);
     
-    bool initConnection(int Port, char* ip);
+    bool initConnection(int Port, const char* ip);
 
     bool sendMessage(std::string message);
 

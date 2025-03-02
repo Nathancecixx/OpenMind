@@ -7,7 +7,7 @@ public:
     // Flags
     enum FLAGS { NONE };
     // Type
-    enum TYPE { INVALID, CONNECT, DECONNECT, SERVER_CLOSE, MESSAGE };
+    enum TYPE { INVALID, CONNECT, DISCONNECT, SERVER_CLOSE, MESSAGE, PROMPT };
 
 private:
     // Holds the databuffer
