@@ -1,7 +1,9 @@
 #include <iostream>
 #include "NetworkManager.hpp"
 
-NetworkManager::NetworkManager(std::function<void(Packet, bool)> messageCallback) : onMessage(messageCallback) {} // Store the callback
+NetworkManager::NetworkManager(std::function<void(Packet, bool)> messageCallback) {
+    onMessage = messageCallback;
+}
 
 bool NetworkManager::initConnection(int Port, char* ip){
     //WSA Startup
