@@ -5,7 +5,6 @@
 #ifdef _WIN32
 #include <WinSock2.h>
 #include <Windows.h>
-#define Poll(fd, nfds, timeout) WSAPoll(fd, nfds, timeout)
 #else
 #define INVALID_SOCKET  -1
 #define SOCKET_ERROR    -1
@@ -13,7 +12,6 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#define Poll(fd, nfds, timeout) poll(fd, nfds, timeout)
 #endif
 
 #include "Client.h"

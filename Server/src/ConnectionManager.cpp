@@ -5,9 +5,9 @@
 
 #include "library.h"
 #include "Chatroom.h"
+#include "Defines.h"
 
-constexpr int POLL_WAIT			= 100;
-constexpr int DISCONNECT_DELAY	= 3;
+constexpr int DISCONNECT_DELAY	= 300;
 
 // ----- Creation ----- Destruction -----
 
@@ -72,6 +72,8 @@ bool ConnectionManager::isRunning() {
 
 void ConnectionManager::createChatroom(Client c1, Client c2) {
 	Chatroom c(c1, c2);
+	std::thread t(Chatroom::chat, c);
+	t.detach();
 }
 
 void ConnectionManager::await() {
