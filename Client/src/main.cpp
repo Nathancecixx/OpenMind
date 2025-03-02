@@ -6,11 +6,12 @@
 
 #include "NetworkManager.hpp"
 #include "MessageManager.hpp"
+#include "ui/mainscreen.h"
 
 int main(void) {
-	const int screenWidth = 800;
-	const int screenHeight = 600;
-	InitWindow(screenWidth, screenHeight, "Middle Ground");
+	const int screenWidth = 960;
+	const int screenHeight = 720;
+	InitWindow(screenWidth, screenHeight, "Open Mind");
 
 	MessageManager mm;
 
@@ -18,13 +19,30 @@ int main(void) {
         mm.addMessage(p.data(), isOwner);
     });
 
-	nm.initConnection(7771, "192.168.144.171");
+	MainScreen mainScreen = MainScreen();
+
+	mainScreen.OnChatMessageSent = [&]() {
+		nm.sendMessage(mainScreen.GetCurrentChatMessage());
+	};
+
+	mainScreen.OnStartChattingButtonClicked = [&]() {
+		bool success = nm.initConnection(7771, "192.168.144.171");
+		if (success) {
+			mainScreen.GoToChatMenu();
+		}
+	};
+
+	mainScreen.GetMessages = [&]() {
+		return mm.getMessages();
+	};
 	
 	SetTargetFPS(60);
 	while (!WindowShouldClose()) {
 		BeginDrawing();
-		ClearBackground(RAYWHITE);
-		GuiButton({0,0,40,20}, "Button");
+		ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
+		
+		mainScreen.Draw();
+
 		EndDrawing();
 	}
 
