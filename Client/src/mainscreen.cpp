@@ -95,7 +95,7 @@ void MainScreen::DrawChat() {
         int spacing = 48;
 
         for (int i = 0; i < messages.size(); i++) {
-            GuiSetStyle(STATUSBAR, TEXT_ALIGNMENT, messages[i].isOwner ? TEXT_ALIGN_LEFT : TEXT_ALIGN_RIGHT);
+            GuiSetStyle(STATUSBAR, TEXT_ALIGNMENT, messages[i].isOwner ? TEXT_ALIGN_RIGHT : TEXT_ALIGN_LEFT);
             GuiStatusBar({chatView.x, chatView.y + chatScroll.y + (i * spacing), chatView.width, 32}, messages[i].str.c_str());
             contentHeight += spacing;
         }
