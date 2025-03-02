@@ -87,11 +87,15 @@ void Chatroom::chatRecv() {
     std::string threadId = ss.str();
     library::print("Receive thread created on thread " + threadId + '\n');
 
+    int count = 0;
+    bool isProgressed = false;
+
     // Get receive data
     char* recvBuf;
     while (true) {
         for (Client c : this->m_clients) {
             if ((recvBuf = this->pollRecv(c.socket())) != nullptr) {
+                //?????
                 if (strcmp(recvBuf, "end of message") == 0) {
                     library::print("Exiting room with thread " + threadId);
                     return;
@@ -102,6 +106,17 @@ void Chatroom::chatRecv() {
                 p.deserialize(recvBuf);
                 recvBuf = nullptr;
                 this->checkData(c, p);
+
+                if(!isProgressed) count++;
+            }
+        }
+
+        if(isProgressed) {
+            continue;
+        } else if(count >= 5) {
+            for(Client c : this->m_clients){
+                this->promptSend(c, prompt.second);
+                isProgressed = true;
             }
         }
     }
