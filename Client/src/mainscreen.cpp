@@ -70,6 +70,8 @@ void MainScreen::DrawChat() {
     }
 
     if (GuiButton({768, 656, 64, 64}, "Send")) {
+        memset(currentChatMessage, 0, 1000);
+        
         if (OnChatMessageSent != nullptr) {
             OnChatMessageSent();
         }
