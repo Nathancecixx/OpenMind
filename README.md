@@ -44,14 +44,23 @@ flowchart LR
     subgraph Server ["Server"]
         API["Connection Handler"]
         RM1["Room One"]
-        RM2["Room One"]
+    end
+
+    subgraph Client2 ["Client"]
+        GUI2["GUI - Raylib"]
+        NM2["Network Manager"]
+        MM2["Message Manager"]
     end
 
     GUI -->|User Input| NM
     GUI -->|User Input| MM
     NM -->|TCP/UDP Requests| API
     API -->|Creates Thread| RM1
-    API -->|Creates Thread| RM2
+
+    GUI2 -->|User Input| NM2
+    GUI2 -->|User Input| MM2
+    NM2 -->|TCP/UDP Requests| API
+    API -->|Creates Thread| RM1
 
 ```
 
