@@ -9,40 +9,54 @@
   <img src="https://contrib.rocks/image?repo=Nathancecixx/OpenMind" alt="contrib.rocks image" />
 </a>
 
-## Background
-This project was a team project built during the 2025 Conestoga Computing Society Hackathon. 
+## Demo
+![Demo Picture](/Demo.png)
 
+
+## Background
+This project was a team project built during the 2025 Conestoga Computing Society Hackathon. We were tasked with implementing a technical solution to the United Nations **Sustainable Development Goal** #16; Peace, Justice, and Strong Institutions.
+
+👉 Learn more about **SDG** [#16: Peace, Justice, and Strong Institutions](https://sdgs.un.org/goals/goal16)
 
 ## Purpose / Problem
-All around the world people experience hate and descrimination based on the labels placed on them for a subset of their beliefs. If you agree with anything a particular political group says, you then get looked at as a crazy radical for that group. Our messenging service provides an easy platform for people to discuss their beleifs in a civilized way. The goal is to show people how much common ground people actually have in their beliefs and to not villianize the other side.
+Hate and division thrive in silence. When people stop talking, misunderstandings grow, and conflicts escalate. In today's polarized world, individuals are often judged based on labels rather than their actual beliefs. This division fuels hostility, making it harder to see the good in each other.
 
-## Main Product Challenges
-our product in the first itterstion was overly complex, and therfore...
+Open Mind is built to change that. By providing a space for open and respectful discussions, we aim to break down barriers, challenge misconceptions, and push for common ground. Our platform encourages civil conversations that help people recognize shared values rather than focusing solely on differences. Through dialogue, we can replace hostility with understanding, move past labels, and work toward a more united world.
 
-```C++
-std::cout << "Hello world" << std::endl
-```
+## Features
+- **Graphical UI** built with Raylib
+- **Real-time messaging** using TCP/IP
+- **Custom prompts** to lead conversations to middleground
+- **Threaded server architecture** for scalability
+- **Secure and private** chat environment
 
 ## Architecture
+Open Mind follows a client-server architecture where users interact with a Raylib-based GUI. The Network Manager handles communication between the client and server via TCP/IP requests. The server manages multiple discussion rooms, each running on a separate thread.
+
 ```mermaid
 flowchart LR
     subgraph Client ["Client"]
         GUI["GUI - Raylib"]
         NM["Network Manager"]
+        MM["Message Manager"]
     end
 
     subgraph Server ["Server"]
         API["Connection Handler"]
-        DB["Database"]
-        FS["File Storage"]
+        RM1["Room One"]
+        RM2["Room One"]
     end
 
     GUI -->|User Input| NM
+    GUI -->|User Input| MM
     NM -->|TCP/UDP Requests| API
-    API -->|Stores Data| DB
-    API -->|Handles Files| FS
+    API -->|Creates Thread| RM1
+    API -->|Creates Thread| RM2
 
 ```
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 
 [C]: https://img.shields.io/badge/C-00599C?style=for-the-badge&logo=c&logoColor=white  
