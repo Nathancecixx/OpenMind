@@ -54,12 +54,12 @@ flowchart LR
 
     GUI -->|User Input| NM
     GUI -->|User Input| MM
-    NM -->|TCP/UDP Requests| API
+    NM -->|TCP Connection| API
     API -->|Creates Thread| RM1
 
     GUI2 -->|User Input| NM2
     GUI2 -->|User Input| MM2
-    NM2 -->|TCP/UDP Requests| API
+    NM2 -->|TCP Connection| API
     API -->|Creates Thread| RM1
 
 ```
