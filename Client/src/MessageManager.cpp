@@ -2,7 +2,17 @@
 
 bool MessageManager::addMessage(std::string str, bool isOwner){
     std::string date = getCurrentTime();
-    Message message(str, date, isOwner);
+    Message message(str, date, isOwner, false);
+
+    //Lock mutex before vector edit
+    std::lock_guard<std::mutex> lock(messageListMutex);
+    this->messageList.push_back(message);
+    return true;
+}
+
+bool MessageManager::addWarning(std::string str){
+    std::string date = getCurrentTime();
+    Message message(str, date, true, true);
 
     //Lock mutex before vector edit
     std::lock_guard<std::mutex> lock(messageListMutex);

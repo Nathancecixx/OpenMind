@@ -1,9 +1,14 @@
 #include <iostream>
 #include "NetworkManager.hpp"
 
-NetworkManager::NetworkManager(std::function<void(std::string, bool)> messageCallback, std::function<void(std::string)> promptCallback) {
+NetworkManager::NetworkManager(
+    std::function<void(std::string, bool)> messageCallback, 
+    std::function<void(std::string)> promptCallback, 
+    std::function<void(std::string)> warningCallback
+) {
     onMessage = messageCallback;
     onPrompt = promptCallback;
+    onWarning = warningCallback;
 }
 
 bool NetworkManager::initConnection(int Port, const char* ip){
@@ -99,6 +104,8 @@ void NetworkManager::recieveMessages(){
         //Parse packet type
         if(packet.type() == Packet::MESSAGE){
             onMessage(packet.data(), false);
+        }else if(packet.type() == Packet::WARNING){
+            onWarning("Please keep the conversation civil.");
         }else if(packet.type() == Packet::PROMPT){
             onPrompt(packet.data());
         }
