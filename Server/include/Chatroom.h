@@ -22,8 +22,11 @@ private:
     // Send function
     void chatSend(const Client& client, const std::string& message);
 
-    // Send function
+    // Send prompt function
     void promptSend(const Client& client, const std::string& prompt);
+
+    // Send warning function
+    void warningSend(const Client& client);
 
     // Receive function
     void chatRecv();
@@ -33,6 +36,9 @@ private:
 
     // Check received data
     void checkData(const Client& client, const Packet& packet);
+
+    // Analyze message sentiment
+    std::string analyzeSentiment(const std::string& message);
 
 public:
     // Takes 2 clients into chatroom

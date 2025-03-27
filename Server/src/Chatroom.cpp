@@ -80,6 +80,16 @@ void Chatroom::promptSend(const Client& client, const std::string& prompt){
     send(client.socket(), data.data(), strlen(data.data()), 0);
 }
 
+void Chatroom::warningSend(const Client& client){
+    Packet data;
+    data.serialize(0, Packet::WARNING, "Warning");
+    if (data.data() == nullptr) {
+        std::cout << "No data to send\n";
+        return;
+    }
+    send(client.socket(), data.data(), strlen(data.data()), 0);
+}
+
 void Chatroom::chatRecv() {
     // Print thread data
     std::stringstream ss;
@@ -145,6 +155,40 @@ void Chatroom::checkData(const Client& client, const Packet& packet) {
     std::stringstream data; 
     data << "Type: " << packet.type() << ", Data: " << packet.data() << ", Flags: " << packet.flags() << ", Length: " << packet.length() << '\n';
     library::print(data.str());
-    echo(client, packet.data());
+
+    std::string sentiment = this->analyzeSentiment(packet.data());
+    std::cout << "Sentimate: " << sentiment << std::endl;
+
+    if(sentiment.compare("negative") == 0) {
+        warningSend(client);
+    } else {
+        echo(client, packet.data());
+    }
+}
+
+
+std::string Chatroom::analyzeSentiment(const std::string& message) {
+    std::string script_path = "..\\src\\SentimentAnalysis\\sentiment.py";
+    std::string command = "python \"" + script_path + "\" \"" + message + "\"";
+    std::string result;
+    char buffer[128];
+
+    // Open a process to capture the output of the Python script
+    std::unique_ptr<FILE, decltype(&_pclose)> pipe(_popen(command.c_str(), "r"), _pclose);
+    if (!pipe) {
+        throw std::runtime_error("popen() failed!");
+    }
+
+    // Read the output from the Python script
+    while (fgets(buffer, sizeof(buffer), pipe.get()) != nullptr) {
+        result += buffer;
+    }
+
+    // Remove trailing newline characters
+    if (!result.empty() && result.back() == '\n') {
+        result.pop_back();
+    }
+
+    return result;
 }
 

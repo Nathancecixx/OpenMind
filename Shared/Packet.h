@@ -5,7 +5,7 @@
 class Packet {
 public:
     // Type
-    enum TYPE { INVALID, CONNECT, DISCONNECT, SERVER_CLOSE, MESSAGE, PROMPT };
+    enum TYPE { INVALID, CONNECT, DISCONNECT, SERVER_CLOSE, MESSAGE, PROMPT, WARNING };
 
 private:
     // Holds the databuffer

@@ -28,7 +28,8 @@ int main(void) {
 	//Initialize Network manager with callback functions
 	NetworkManager nm(
 		[&](std::string p, bool isOwner) { mm.addMessage(p, isOwner); },
-		[&](std::string p) { mm.addPrompt(p); }
+		[&](std::string p) { mm.addPrompt(p);},
+		[&](std::string p) { mm.addWarning(p); }
 	);
 
 

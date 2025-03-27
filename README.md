@@ -2,7 +2,7 @@
 
 ### Built With
 
-[![C]][C-url] [![C++][C++]][C++-url] [![Raylib][Raylib]][Raylib-url]
+[![C]][C-url] [![C++][C++]][C++-url] [![Raylib][Raylib]][Raylib-url] [![Python][Python]][Python-url]
 
 ### Top contributors:
 <a href="https://github.com/Nathancecixx/OpenMind/graphs/contributors">
@@ -27,6 +27,7 @@ Open Mind is built to change that. By providing a space for open and respectful 
 - **Graphical UI** built with Raylib
 - **Real-time messaging** using TCP/IP
 - **Custom prompts** to lead conversations to middleground
+- **Sentiment Analysis** to ensure conversation remain civil
 - **Threaded server architecture** for scalability
 - **Secure and private** chat environment
 
@@ -76,3 +77,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 [Raylib]: https://img.shields.io/badge/Raylib-000000?style=for-the-badge&logo=raylib&logoColor=white  
 [Raylib-url]: https://www.raylib.com/
+
+[Python]: https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white
+[Python-url]: https://www.python.org

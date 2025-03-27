@@ -23,6 +23,8 @@ public:
     MessageManager() = default;
 
     bool addMessage(std::string message, bool isOwner);
+    
+    bool addWarning(std::string message);
 
     bool addPrompt(std::string message);
 

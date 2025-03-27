@@ -125,6 +125,8 @@ void MainScreen::DrawChat() {
     int spacing = 48;
     Color userColor = {50, 150, 255, 255};  // Blue for sent messages
     Color receivedColor = {200, 200, 200, 255}; // Light gray for received messages
+    Color warningColor = {255, 165, 0, 255}; // Orange for warning messages
+
 
     int maxBubbleWidth = chatView.width * 0.8;
     int fontSize = 18;
@@ -132,7 +134,9 @@ void MainScreen::DrawChat() {
 
     for (size_t i = 0; i < messages.size(); i++) {
         //Get the current bubbles color
-        Color bgColor = messages[i].isOwner ? userColor : receivedColor;
+        Color bgColor = (messages[i].isOwner)
+        ? (messages[i].isWarning ? warningColor : userColor)
+        : receivedColor;
 
         //Measure the current messages text
         int textWidth = MeasureText(messages[i].str.c_str(), 18) + bubblePadding * 2;

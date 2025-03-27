@@ -58,6 +58,8 @@ class NetworkManager{
 private:
     std::function<void(std::string, bool)> onMessage;
     std::function<void(std::string)> onPrompt;
+    std::function<void(std::string)> onWarning;
+
     WSADATA wsaData;
     SOCKET sock;
     std::atomic<bool> running;
@@ -65,7 +67,10 @@ private:
     std::thread senderThread;
 
 public:
-    NetworkManager(std::function<void(std::string, bool)> messageCallback, std::function<void(std::string)> promptCallback);
+    NetworkManager(
+        std::function<void(std::string, bool)> messageCallback, 
+        std::function<void(std::string)> promptCallback, 
+        std::function<void(std::string)> warningCallback );
     
     bool initConnection(int Port, const char* ip);
 
